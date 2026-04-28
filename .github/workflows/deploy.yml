@@ -1,0 +1,26 @@
+name: Ce vreu eu
+on: 
+    push:
+        branches: 
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Dau si eu Deploy
+              uses: appleboy/ssh-activation@v1.0.3
+              with:
+                host: ${{ secrets.SERVER_HOST }}
+                username: ${{ secrets.SERVER_USERNAME }}
+                key: ${{ secrets.SSH_KEY }}
+                port: 2222
+                script: |
+                    if [ -d "test" ]; then 
+                        echo "e deja"
+                    else 
+                        git clone git@github.com:georgiana-raluca-negru/test.git
+                    fi
+
+                    cd test
+                    cat "ceva" > file.txt
