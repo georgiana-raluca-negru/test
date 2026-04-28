@@ -16,11 +16,25 @@ jobs:
                 key: ${{ secrets.SSH_KEY }}
                 port: 2222
                 script: |
+                    # 1. Clone or Pull the latest code
                     if [ -d "test" ]; then 
-                        echo "e deja"
+                        cd test
+                        git pull origin main
                     else 
                         git clone https://github.com/georgiana-raluca-negru/test.git
+                        cd test
                     fi
 
-                    cd test
-                    echo "ceva" > file.txt
+                    # 2. Set up the virtual environment and install packages
+                    python3 -m venv .venv
+                    source .venv/bin/activate
+                    pip install fastapi uvicorn
+
+                    # 3. Stop the old server if it is already running
+                    pkill -f uvicorn || true
+
+                    # 4. Start the new server in the background using nohup
+                    # (This prevents the server from dying when the GitHub Action finishes)
+                    nohup uvicorn main:app --host 0.0.0.0 --port 8000 > app.log 2>&1 &
+                    
+                    echo "Deploy completed successfully!"
