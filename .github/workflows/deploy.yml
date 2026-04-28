@@ -19,7 +19,7 @@ jobs:
                     if [ -d "test" ]; then 
                         echo "e deja"
                     else 
-                        git clone git@github.com:georgiana-raluca-negru/test.git
+                        git clone https://github.com/georgiana-raluca-negru/test.git
                     fi
 
                     cd test
